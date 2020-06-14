@@ -19,9 +19,8 @@ public class Oponente {
     public int posX;
     public int posY;
     public int velY;
-    public boolean ehDenso;
 
-    public Oponente(int posicaoX, int posicaoY, int velocidadeY, boolean denso) {
+    public Oponente(int posicaoX, int posicaoY, int velocidadeY) {
         try {
             sprite = ImageIO.read(getClass().getResource("imgs/sprite_carros.png"));
             modelo1 = Recursos.getInstance().cortarImagem(0, 0, 100, 100, sprite);
@@ -41,6 +40,5 @@ public class Oponente {
         centroX = posX + raio;
         centroY = posY + raio;
         velY = velocidadeY;
-        ehDenso = denso;
     }
 }

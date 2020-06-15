@@ -34,7 +34,7 @@ public class Oponente {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        raio = 50;
+        raio = 45;
         posX = posicaoX;
         posY = posicaoY;
         centroX = posX + raio;

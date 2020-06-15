@@ -21,6 +21,7 @@ public class Jogador {
     public int velX;
     public int centroX;
     public int centroY;
+    public int pontos;
 
     public Jogador() {
         try {
@@ -40,9 +41,10 @@ public class Jogador {
             System.out.println("Erro ao carregar a imagem!");
             e.getStackTrace();
         }
+        pontos = 0;
         posX = 270;
         posY = 500;
-        raio = 50;
+        raio = 45;
         velX = 0;
         centroX = posX + raio;
         centroY = posY + raio;

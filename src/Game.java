@@ -4,9 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.util.Timer;
-import java.util.concurrent.TimeUnit;
-
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Game extends JPanel {
@@ -75,19 +73,12 @@ public class Game extends JPanel {
             }
         });
         jogador = new Jogador();
-        velocidade = 10;
+        velocidade = 5;
         pista1 = new Pista(0);
         pista2 = new Pista(-600);
         corridaEmAndamento = true;
         nivel = 1;
-        oponente1 = new Oponente(270, -100, velocidade);
-        oponente2 = new Oponente(450, -300, velocidade);
-        oponente3 = new Oponente(270, -500, velocidade);
-        oponente4 = new Oponente(270, -700, velocidade);
-        oponente5 = new Oponente(450, -900, velocidade);
-        oponente6 = new Oponente(270, -1100, velocidade);
-        oponente7 = new Oponente(450, -1300, velocidade);
-        oponente8 = new Oponente(270, -1500, velocidade);
+        nascimentoOponentes();
 
         setFocusable(true);
         setLayout(null);
@@ -127,12 +118,16 @@ public class Game extends JPanel {
     public void update() {
 
         if (corridaEmAndamento) {
+            
+            setarNivel();
 
             renascimentoOponentes(corridaEmAndamento);
 
             movimentoJogadorEOponentes();
 
             testeColisoes();
+
+            setarPontos();
 
             movimentarPista(corridaEmAndamento);
 
@@ -247,35 +242,35 @@ public class Game extends JPanel {
         jogador.centroY = jogador.posY + jogador.raio;
 
         //Oponente 1
-        oponente1.posY = oponente1.posY + (velocidade - 2);
+        oponente1.posY = oponente1.posY + velocidade;
         oponente1.centroX = oponente1.posX + oponente1.raio;
         oponente1.centroY = oponente1.posY + oponente1.raio;
         // Oponente 2
-        oponente2.posY = oponente2.posY + (velocidade - 2);
+        oponente2.posY = oponente2.posY + velocidade;
         oponente2.centroX = oponente2.posX + oponente2.raio;
         oponente2.centroY = oponente2.posY + oponente2.raio;
         // Oponente 3
-        oponente3.posY = oponente3.posY + (velocidade - 2);
+        oponente3.posY = oponente3.posY + velocidade;
         oponente3.centroX = oponente3.posX + oponente3.raio;
         oponente3.centroY = oponente3.posY + oponente3.raio;
         // Oponente 4
-        oponente4.posY = oponente4.posY + (velocidade - 2);
+        oponente4.posY = oponente4.posY + velocidade;
         oponente4.centroX = oponente4.posX + oponente4.raio;
         oponente4.centroY = oponente4.posY + oponente4.raio;
         // Oponente 5
-        oponente5.posY = oponente5.posY + (velocidade - 2);
+        oponente5.posY = oponente5.posY + velocidade;
         oponente5.centroX = oponente5.posX + oponente5.raio;
         oponente5.centroY = oponente5.posY + oponente5.raio;
         // Oponente 6
-        oponente6.posY = oponente6.posY + (velocidade - 2);
+        oponente6.posY = oponente6.posY + velocidade;
         oponente6.centroX = oponente6.posX + oponente6.raio;
         oponente6.centroY = oponente6.posY + oponente6.raio;
         // Oponente 7
-        oponente7.posY = oponente7.posY + (velocidade - 2);
+        oponente7.posY = oponente7.posY +  velocidade;
         oponente7.centroX = oponente7.posX + oponente7.raio;
         oponente7.centroY = oponente7.posY + oponente7.raio;
         // Oponente 8
-        oponente8.posY = oponente8.posY + (velocidade - 2);
+        oponente8.posY = oponente8.posY + velocidade;
         oponente8.centroX = oponente8.posX + oponente8.raio;
         oponente8.centroY = oponente8.posY + oponente8.raio;
     }
@@ -283,53 +278,80 @@ public class Game extends JPanel {
     public void renascimentoOponentes(boolean situacao) {
 
         if (situacao) {
-            if (oponente1.posY > 598) {
-                oponente1 = new Oponente(270, -100, velocidade);
-            }
-            
-            if (oponente1.posY > 598) {
-                oponente1 = new Oponente(270, -100, velocidade);
-            }
-            
-            if (oponente1.posY > 598) {
-                oponente1 = new Oponente(270, -100, velocidade);
-            }
-            
-            if (oponente1.posY > 598) {
-                oponente1 = new Oponente(270, -100, velocidade);
-            }
-            
-            if (oponente1.posY > 598) {
-                oponente1 = new Oponente(270, -100, velocidade);
-            }
-            
-            if (oponente1.posY > 598) {
-                oponente1 = new Oponente(270, -100, velocidade);
-            }
-            
-            if (oponente1.posY > 598) {
-                oponente1 = new Oponente(270, -100, velocidade);
-            }
-            
-            if (oponente1.posY > 598) {
-                oponente1 = new Oponente(270, -100, velocidade);
+            if (oponente8.posY > 598) {
+                nascimentoOponentes();
             }
         }
+    }
 
-        
-        /*oponente2 = new Oponente(450, -300, velocidade);
-        oponente3 = new Oponente(270, -500, velocidade);
-        oponente4 = new Oponente(270, -700, velocidade);
-        oponente5 = new Oponente(450, -900, velocidade);
-        oponente6 = new Oponente(270, -1100, velocidade);
-        oponente7 = new Oponente(450, -1300, velocidade);
-        oponente8 = new Oponente(270, -1500, velocidade); */
+    public void setarNivel() {
+        if (jogador.pontos == 0) {
+            velocidade = 5;
+            nivel = 1;
+        } else if (jogador.pontos == 30) {
+            velocidade = 10;
+            nivel = 2;
+        } else if (jogador.pontos == 70) {
+            velocidade = 15;
+            nivel = 3;
+        } else if (jogador.pontos == 110) {
+            velocidade = 20;
+            nivel = 4;
+        }
+    }
+
+    public void setarPontos() {
+
+        if (oponente1.posY == (600 + velocidade)) {
+            jogador.pontos++;
+        }
+
+        if (oponente2.posY == (600 + velocidade)) {
+            jogador.pontos++;
+        }
+
+        if (oponente3.posY == (600 + velocidade)) {
+            jogador.pontos++;
+        }
+
+        if (oponente4.posY == (600 + velocidade)) {
+            jogador.pontos++;
+        }
+
+        if (oponente5.posY == (600 + velocidade)) {
+            jogador.pontos++;
+        }
+
+        if (oponente6.posY == (600 + velocidade)) {
+            jogador.pontos++;
+        }
+
+        if (oponente7.posY == (600 + velocidade)) {
+            jogador.pontos++;
+        }
+
+        if (oponente8.posY == (600 + velocidade)) {
+            jogador.pontos++;
+        }
     }
 
     public void fimDoJogo() {
         corridaEmAndamento = false;
-        System.out.println("FIM DO JOGO!");
 
+        JOptionPane.showConfirmDialog(null, "Fim de jogo!\n Você alcançou " + jogador.pontos + " pontos!\n Deseja recomeçar?");
+        jogador.pontos = 0;
+
+    }
+
+    public void nascimentoOponentes() {
+        oponente1 = new Oponente(Constantes.CoordenadasOponente.Fila.ESQUERDA, Constantes.CoordenadasOponente.Posicao.P1, velocidade);
+        oponente2 = new Oponente(Constantes.CoordenadasOponente.Fila.ESQUERDA, Constantes.CoordenadasOponente.Posicao.P3, velocidade);
+        oponente3 = new Oponente(Constantes.CoordenadasOponente.Fila.DIREITA, Constantes.CoordenadasOponente.Posicao.P6, velocidade);
+        oponente4 = new Oponente(Constantes.CoordenadasOponente.Fila.ESQUERDA, Constantes.CoordenadasOponente.Posicao.P8, velocidade);
+        oponente5 = new Oponente(Constantes.CoordenadasOponente.Fila.ESQUERDA, Constantes.CoordenadasOponente.Posicao.P10, velocidade);
+        oponente6 = new Oponente(Constantes.CoordenadasOponente.Fila.ESQUERDA, Constantes.CoordenadasOponente.Posicao.P13, velocidade);
+        oponente7 = new Oponente(Constantes.CoordenadasOponente.Fila.DIREITA, Constantes.CoordenadasOponente.Posicao.P15, velocidade);
+        oponente8 = new Oponente(Constantes.CoordenadasOponente.Fila.DIREITA, Constantes.CoordenadasOponente.Posicao.P17, velocidade);
     }
 
     //-----------------------------------------------------------//

@@ -41,4 +41,8 @@ public interface Constantes {
         }
 
     }
+    public static class DimensoesTela{
+        public static final Integer LARGURA = 800;
+        public static final Integer ALTURA = 600;
+    }
 }

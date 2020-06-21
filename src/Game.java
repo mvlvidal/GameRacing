@@ -69,14 +69,31 @@ public class Game extends JPanel {
                     case KeyEvent.VK_RIGHT:
                         k_direita = true;
                         break;
+                    case KeyEvent.VK_P:
+                        //Pausar ou Retomar Jogo
+                        if (corridaEmAndamento == true) {
+                            corridaEmAndamento = false;
+                        } else {
+                            corridaEmAndamento = true;
+                        }
+                        break;
+                    case KeyEvent.VK_ESCAPE:
+                        //Sair do Jogo
+                        validaSairDoJogo();
+                        break;
+                    case KeyEvent.VK_R:
+                        //Reiniciar jogo
+                        validaresetarJogo();
+                        break;
                 }
             }
         });
-        jogador = new Jogador();
+        nascimentoJogador();
         velocidade = 5;
         pista1 = new Pista(0);
         pista2 = new Pista(-600);
-        corridaEmAndamento = true;
+        corridaEmAndamento = false;
+        validarInicioCorrida();
         nivel = 1;
         nascimentoOponentes();
 
@@ -107,7 +124,7 @@ public class Game extends JPanel {
 
     public void handlerEvents() {
         jogador.velX = 0;
-        imgAtual = jogador.modelo1;
+
         if (k_esquerda == true) {
             jogador.velX = -5;
         } else if (k_direita == true) {
@@ -118,7 +135,7 @@ public class Game extends JPanel {
     public void update() {
 
         if (corridaEmAndamento) {
-            
+
             setarNivel();
 
             renascimentoOponentes(corridaEmAndamento);
@@ -163,7 +180,7 @@ public class Game extends JPanel {
         catetoV = jogador.centroY - oponente2.centroY;
         hipotenusa = Math.sqrt(Math.pow(catetoH, 2) + Math.pow(catetoV, 2));
         if (hipotenusa <= jogador.raio + oponente2.raio) { // verifica se houve colis�o circular
-            jogador.posX = jogador.posX - jogador.velX; // desfaz o movimento horizontal
+            fimDoJogo();
         }
 
         //Oponente 3
@@ -266,7 +283,7 @@ public class Game extends JPanel {
         oponente6.centroX = oponente6.posX + oponente6.raio;
         oponente6.centroY = oponente6.posY + oponente6.raio;
         // Oponente 7
-        oponente7.posY = oponente7.posY +  velocidade;
+        oponente7.posY = oponente7.posY + velocidade;
         oponente7.centroX = oponente7.posX + oponente7.raio;
         oponente7.centroY = oponente7.posY + oponente7.raio;
         // Oponente 8
@@ -336,11 +353,29 @@ public class Game extends JPanel {
     }
 
     public void fimDoJogo() {
+
         corridaEmAndamento = false;
 
-        JOptionPane.showConfirmDialog(null, "Fim de jogo!\n Você alcançou " + jogador.pontos + " pontos!\n Deseja recomeçar?");
-        jogador.pontos = 0;
+        Object[] respostas = {"Sim", "Não"};
 
+        int resposta = JOptionPane.showOptionDialog(null, "Fim de jogo!\n Você alcançou " + jogador.pontos + " pontos!\n Deseja recomeçar?", "Você bateu!", JOptionPane.DEFAULT_OPTION, JOptionPane.OK_OPTION, null, respostas, respostas[0]);
+
+        if (resposta == 0) {
+            reiniciarJogo();
+        }else if(resposta == 1){
+            System.exit(0);
+        }
+
+    }
+
+    public void reiniciarJogo() {
+        jogador.pontos = 0;
+        velocidade = 5;
+        nivel = 1;
+        nascimentoJogador();
+        resetarDirecao();
+        nascimentoOponentes();
+        corridaEmAndamento = true;
     }
 
     public void nascimentoOponentes() {
@@ -352,6 +387,52 @@ public class Game extends JPanel {
         oponente6 = new Oponente(Constantes.CoordenadasOponente.Fila.ESQUERDA, Constantes.CoordenadasOponente.Posicao.P13, velocidade);
         oponente7 = new Oponente(Constantes.CoordenadasOponente.Fila.DIREITA, Constantes.CoordenadasOponente.Posicao.P15, velocidade);
         oponente8 = new Oponente(Constantes.CoordenadasOponente.Fila.DIREITA, Constantes.CoordenadasOponente.Posicao.P17, velocidade);
+    }
+
+    public void nascimentoJogador() {
+        jogador = new Jogador();
+    }
+
+    //Corrige bug que trava a direção quando a corrida reinicia após a colisão
+    public void resetarDirecao() {
+        k_direita = false;
+        k_esquerda = false;
+    }
+
+    public void validaSairDoJogo() {
+        
+        corridaEmAndamento = false;
+
+        Object[] respostas = {"Sim", "Não"};
+
+        int resposta = JOptionPane.showOptionDialog(null, "Deseja sair do jogo?", "Atenção!", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, respostas, respostas[0]);
+
+        if (resposta == 0) {
+            System.exit(0);
+        }else if(resposta == 1){
+            corridaEmAndamento = true;
+        }
+
+    }
+    
+    public void validaresetarJogo(){
+        corridaEmAndamento = false;
+
+        Object[] respostas = {"Sim", "Não"};
+
+        int resposta = JOptionPane.showOptionDialog(null, "Deseja reiniciar o jogo?\n Você perderá os pontos que acumulou", "Atenção!", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, respostas, respostas[0]);
+
+        if (resposta == 0) {
+            reiniciarJogo();
+        }else if(resposta == 1){
+            corridaEmAndamento = true;
+        }
+    }
+    
+    private void validarInicioCorrida() {
+        //TODO - Criar popUp que mostra as regras e comandos do jogo
+        
+        corridaEmAndamento = true;
     }
 
     //-----------------------------------------------------------//
@@ -375,4 +456,5 @@ public class Game extends JPanel {
         g.drawImage(oponente8.modelo8, oponente8.posX, oponente8.posY, null);
 
     }
+
 }

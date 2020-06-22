@@ -480,7 +480,7 @@ public class Game extends JPanel {
         g.drawString("A / <=  : Movimento para Esquerda", 600,470);
         g.drawString("D / =>  : Movimento para Direita", 600,490);
         g.drawString("Enter  : Iniciar Jogo", 600,510);
-        g.drawString("P          : Pausar/Remotar Jogo", 600,530);
+        g.drawString("P          : Pausar/Retomar Jogo", 600,530);
         g.drawString("R          : Reiniciar Jogo", 600,550);
         g.drawString("ESC     : Sair do Jogo", 600,570);
         g.drawString("-----------------------------------------------", 600,590);

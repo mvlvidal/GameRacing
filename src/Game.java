@@ -1,5 +1,6 @@
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -27,6 +28,7 @@ public class Game extends JPanel {
     private BufferedImage imgAtual;
     private int velocidade;
     private boolean corridaEmAndamento;
+    private String estadoJogo;
     private int nivel;
 
     public Game() {
@@ -39,11 +41,11 @@ public class Game extends JPanel {
             @Override
             public void keyReleased(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_UP:
-                        k_cima = false;
+                    case KeyEvent.VK_A:
+                        k_esquerda = false;
                         break;
-                    case KeyEvent.VK_DOWN:
-                        k_baixo = false;
+                    case KeyEvent.VK_D:
+                        k_direita = false;
                         break;
                     case KeyEvent.VK_LEFT:
                         k_esquerda = false;
@@ -57,11 +59,11 @@ public class Game extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_UP:
-                        k_cima = true;
+                    case KeyEvent.VK_A:
+                        k_esquerda = true;
                         break;
-                    case KeyEvent.VK_DOWN:
-                        k_baixo = true;
+                    case KeyEvent.VK_D:
+                        k_direita = true;
                         break;
                     case KeyEvent.VK_LEFT:
                         k_esquerda = true;
@@ -73,8 +75,10 @@ public class Game extends JPanel {
                         //Pausar ou Retomar Jogo
                         if (corridaEmAndamento == true) {
                             corridaEmAndamento = false;
+                            estadoJogo = "Pausado";
                         } else {
                             corridaEmAndamento = true;
+                            estadoJogo = "Retomado";
                         }
                         break;
                     case KeyEvent.VK_ESCAPE:
@@ -83,24 +87,28 @@ public class Game extends JPanel {
                         break;
                     case KeyEvent.VK_R:
                         //Reiniciar jogo
+                        estadoJogo = "";
                         validaresetarJogo();
+                        break;
+                    case KeyEvent.VK_ENTER:
+                        validarInicioCorrida();
                         break;
                 }
             }
-        });
+        });        
+        
         nascimentoJogador();
         velocidade = 5;
         pista1 = new Pista(0);
         pista2 = new Pista(-600);
-        corridaEmAndamento = false;
-        validarInicioCorrida();
         nivel = 1;
         nascimentoOponentes();
-
+        estadoJogo = "Novo";
+        
         setFocusable(true);
         setLayout(null);
 
-        new Thread(new Runnable() { // instancia da Thread + classe interna an�nima
+        new Thread(new Runnable() { // instancia da Thread + classe interna anonima
             @Override
             public void run() {
                 gameloop(); // inicia o gameloop
@@ -111,7 +119,7 @@ public class Game extends JPanel {
     // GAMELOOP -------------------------------
 
     public void gameloop() {
-        while (true) { // repeti��o intermitente do gameloop
+        while (true) { // repetição intermitente do gameloop
             handlerEvents();
             update();
             render();
@@ -362,6 +370,7 @@ public class Game extends JPanel {
 
         if (resposta == 0) {
             reiniciarJogo();
+            estadoJogo = "Novo";
         }else if(resposta == 1){
             System.exit(0);
         }
@@ -375,7 +384,6 @@ public class Game extends JPanel {
         nascimentoJogador();
         resetarDirecao();
         nascimentoOponentes();
-        corridaEmAndamento = true;
     }
 
     public void nascimentoOponentes() {
@@ -410,7 +418,8 @@ public class Game extends JPanel {
         if (resposta == 0) {
             System.exit(0);
         }else if(resposta == 1){
-            corridaEmAndamento = true;
+            corridaEmAndamento = false;
+            estadoJogo = "Pausado"; 
         }
 
     }
@@ -423,16 +432,19 @@ public class Game extends JPanel {
         int resposta = JOptionPane.showOptionDialog(null, "Deseja reiniciar o jogo?\n Você perderá os pontos que acumulou", "Atenção!", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, respostas, respostas[0]);
 
         if (resposta == 0) {
-            reiniciarJogo();
+            reiniciarJogo(); 
+            estadoJogo = "Novo";
         }else if(resposta == 1){
             corridaEmAndamento = true;
         }
     }
     
     private void validarInicioCorrida() {
-        //TODO - Criar popUp que mostra as regras e comandos do jogo
-        
-        corridaEmAndamento = true;
+ 
+        if(corridaEmAndamento == false && estadoJogo.equals("Novo")){
+            corridaEmAndamento = true;
+        }
+               
     }
 
     //-----------------------------------------------------------//
@@ -440,8 +452,8 @@ public class Game extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        setBackground(Color.decode("#165b1e"));
-        g.setColor(Color.RED);
+        
+        setBackground(Color.decode("#165b1e"));       
 
         g.drawImage(pista2.imagem, pista2.posX, pista2.posY, null);
         g.drawImage(pista1.imagem, pista1.posX, pista1.posY, null);
@@ -454,6 +466,30 @@ public class Game extends JPanel {
         g.drawImage(oponente6.modelo6, oponente6.posX, oponente6.posY, null);
         g.drawImage(oponente7.modelo7, oponente7.posX, oponente7.posY, null);
         g.drawImage(oponente8.modelo8, oponente8.posX, oponente8.posY, null);
+        
+        //Painel Status
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.drawString("Pontos: " + jogador.pontos, 10,30);
+        g.drawString("Nível: " + nivel, 10,65);
+        g.drawString("Jogo: " + estadoJogo, 10,100);
+        
+        //Painel Comandos
+        g.setFont(new Font("Arial", Font.BOLD, 12));
+        g.drawString("--------------- COMANDOS ---------------", 600,450);
+        g.drawString("A / <=  : Movimento para Esquerda", 600,470);
+        g.drawString("D / =>  : Movimento para Direita", 600,490);
+        g.drawString("Enter  : Iniciar Jogo", 600,510);
+        g.drawString("P          : Pausar/Remotar Jogo", 600,530);
+        g.drawString("R          : Reiniciar Jogo", 600,550);
+        g.drawString("ESC     : Sair do Jogo", 600,570);
+        g.drawString("-----------------------------------------------", 600,590);
+        
+        //Aviso
+        if(estadoJogo.equals("Novo") && corridaEmAndamento == false){
+            g.setFont(new Font("Arial", Font.BOLD, 30));
+            g.drawString("Pressione ENTER para iniciar a corrida.", 120,300);
+        }
 
     }
 

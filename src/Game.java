@@ -378,6 +378,8 @@ public class Game extends JPanel {
     }
 
     public void reiniciarJogo() {
+        pista1 = new Pista(0);
+        pista2 = new Pista(-600);
         jogador.pontos = 0;
         velocidade = 5;
         nivel = 1;

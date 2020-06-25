@@ -97,6 +97,7 @@ public class Game extends JPanel {
             }
         });        
         
+        //Ao iniciar o jogo pela primeira vez
         nascimentoJogador();
         velocidade = 5;
         pista1 = new Pista(0);
@@ -105,10 +106,11 @@ public class Game extends JPanel {
         nascimentoOponentes();
         estadoJogo = "Novo";
         
+
         setFocusable(true);
         setLayout(null);
 
-        new Thread(new Runnable() { // instancia da Thread + classe interna anonima
+        new Thread(new Runnable() { // instancia de uma Thread diferente da janela + classe interna anonima
             @Override
             public void run() {
                 gameloop(); // inicia o gameloop
@@ -120,11 +122,11 @@ public class Game extends JPanel {
 
     public void gameloop() {
         while (true) { // repetição intermitente do gameloop
-            handlerEvents();
-            update();
-            render();
+            handlerEvents(); //Valida as movimentações do jogador 
+            update();//Atualiza a tela do jogo
+            render();//Renderiza os objetos na tela
             try {
-                Thread.sleep(17);
+                Thread.sleep(17); //Pausa da cadencia do loop
             } catch (Exception e) {
             }
         }
@@ -140,6 +142,7 @@ public class Game extends JPanel {
         }
     }
 
+    //executado em loop 
     public void update() {
 
         if (corridaEmAndamento) {
@@ -159,6 +162,7 @@ public class Game extends JPanel {
         }
     }
 
+    
     public void render() {
         repaint();
     }
@@ -264,39 +268,30 @@ public class Game extends JPanel {
         //Jogador
         jogador.posX = jogador.posX + jogador.velX;
         jogador.centroX = jogador.posX + jogador.raio;
-        jogador.centroY = jogador.posY + jogador.raio;
 
         //Oponente 1
         oponente1.posY = oponente1.posY + velocidade;
-        oponente1.centroX = oponente1.posX + oponente1.raio;
         oponente1.centroY = oponente1.posY + oponente1.raio;
         // Oponente 2
         oponente2.posY = oponente2.posY + velocidade;
-        oponente2.centroX = oponente2.posX + oponente2.raio;
         oponente2.centroY = oponente2.posY + oponente2.raio;
         // Oponente 3
         oponente3.posY = oponente3.posY + velocidade;
-        oponente3.centroX = oponente3.posX + oponente3.raio;
         oponente3.centroY = oponente3.posY + oponente3.raio;
         // Oponente 4
         oponente4.posY = oponente4.posY + velocidade;
-        oponente4.centroX = oponente4.posX + oponente4.raio;
         oponente4.centroY = oponente4.posY + oponente4.raio;
         // Oponente 5
         oponente5.posY = oponente5.posY + velocidade;
-        oponente5.centroX = oponente5.posX + oponente5.raio;
         oponente5.centroY = oponente5.posY + oponente5.raio;
         // Oponente 6
         oponente6.posY = oponente6.posY + velocidade;
-        oponente6.centroX = oponente6.posX + oponente6.raio;
         oponente6.centroY = oponente6.posY + oponente6.raio;
         // Oponente 7
         oponente7.posY = oponente7.posY + velocidade;
-        oponente7.centroX = oponente7.posX + oponente7.raio;
         oponente7.centroY = oponente7.posY + oponente7.raio;
         // Oponente 8
         oponente8.posY = oponente8.posY + velocidade;
-        oponente8.centroX = oponente8.posX + oponente8.raio;
         oponente8.centroY = oponente8.posY + oponente8.raio;
     }
 
